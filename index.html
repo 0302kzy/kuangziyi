@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>邝子伊 | Kuang Ziyi - 个人包装设计作品集</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500&family=Noto+Sans+SC:wght@100;200;300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fdfaf5; /* 奶油白 */
+            --primary-color: #1a1a1a; /* 墨灰 */
+            --accent-color: #d4c4a8; /* 浅卡其 */
+            --secondary-color: #7d7d7d;
+            --white: #ffffff;
+            --transition-smooth: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-quick: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --font-sc: 'Noto Sans SC', sans-serif;
+            --font-en: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { background: var(--bg-color); color: var(--primary-color); font-family: var(--font-sc); overflow-x: hidden; line-height: 1.7; }
+
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-color); }
+
+        /* 顶部固定导航 */
+        header {
+            position: fixed; top: 0; width: 100%; height: 90px;
+            padding: 0 6%; display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; transition: var(--transition-smooth);
+            background: rgba(253, 250, 245, 0.8); backdrop-filter: blur(20px);
+        }
+        header.scrolled { height: 70px; border-bottom: 1px solid rgba(0,0,0,0.03); }
+
+        .logo { font-family: var(--font-en); font-weight: 300; letter-spacing: 6px; text-transform: uppercase; font-size: 0.9rem; cursor: pointer; }
+        .nav-links { display: flex; gap: 50px; }
+        .nav-links a {
+            font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
+            text-decoration: none; color: var(--secondary-color); position: relative;
+            transition: var(--transition-quick);
+        }
+        .nav-links a.active { color: var(--primary-color); font-weight: 500; }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -8px; left: 0; width: 0; height: 1px;
+            background: var(--primary-color); transition: var(--transition-smooth);
+        }
+        .nav-links a.active::after { width: 100%; }
+
+        /* 首页作者介绍区 */
+        .intro-section {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            padding: 0 10%; position: relative; overflow: hidden;
+        }
+        .parallax-bg {
+            position: absolute; top: 0; left: 0; width: 110%; height: 110%;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 196, 168, 0.1) 0%, transparent 70%);
+            z-index: -1; transition: transform 0.1s linear;
+        }
+        .intro-content { max-width: 900px; }
+        .intro-content .label { font-family: var(--font-en); font-size: 0.7rem; letter-spacing: 8px; color: var(--accent-color); margin-bottom: 30px; display: block; }
+        .intro-content h1 { font-size: 4.5rem; font-weight: 100; letter-spacing: 15px; margin-bottom: 40px; line-height: 1.2; }
+        .intro-content p { font-size: 1.1rem; color: var(--secondary-color); max-width: 600px; letter-spacing: 2px; font-weight: 200; }
+
+        /* 作品网格展示区 */
+        .works-section { padding: 150px 6%; }
+        .filter-nav { display: flex; gap: 30px; margin-bottom: 80px; justify-content: center; }
+        .filter-btn {
+            background: none; border: none; font-size: 0.7rem; letter-spacing: 3px;
+            text-transform: uppercase; color: var(--secondary-color); cursor: pointer;
+            padding: 10px 20px; transition: var(--transition-quick);
+        }
+        .filter-btn.active { color: var(--primary-color); font-weight: 500; }
+
+        .works-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 100px 80px;
+            max-width: 1600px; margin: 0 auto;
+        }
+        .work-card {
+            opacity: 0; transform: translateY(50px) scale(0.9);
+            transition: opacity 1s var(--transition-smooth), transform 1s var(--transition-smooth);
+            cursor: pointer; position: relative;
+        }
+        .work-card.reveal { opacity: 1; transform: translateY(0) scale(1); }
+        
+        .img-wrap {
+            width: 100%; height: 650px; overflow: hidden; background: var(--white);
+            position: relative; border-radius: 2px; transition: var(--transition-smooth);
+        }
+        .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.5s var(--transition-smooth); }
+        .work-card:hover .img-wrap { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(0,0,0,0.05); }
+        .work-card:hover img { transform: scale(1.05); }
+        
+        /* 侧边边线高亮 */
+        .work-card::before {
+            content: ''; position: absolute; left: -20px; top: 10%; height: 0; width: 1px;
+            background: var(--accent-color); transition: var(--transition-smooth);
+        }
+        .work-card:hover::before { height: 80%; }
+
+        .work-meta { padding: 40px 0; }
+        .work-meta .cat { font-family: var(--font-en); font-size: 0.6rem; letter-spacing: 4px; color: var(--accent-color); text-transform: uppercase; display: block; margin-bottom: 15px; }
+        .work-meta h3 { font-size: 1.2rem; font-weight: 300; letter-spacing: 4px; margin-bottom: 20px; }
+        .work-meta .short-desc { font-size: 0.85rem; color: var(--secondary-color); letter-spacing: 1px; overflow: hidden; height: 0; transition: var(--transition-smooth); opacity: 0; }
+        .work-card:hover .short-desc { height: auto; opacity: 1; margin-top: 10px; }
+
+        /* 详情介绍区 (左右同步滚动模拟) */
+        #detail-view {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 2000; display: none;
+            overflow-y: auto;
+        }
+        .detail-container { display: flex; min-height: 100vh; }
+        .detail-left { width: 55%; height: 100vh; position: sticky; top: 0; overflow: hidden; background: #fff; }
+        .detail-left img { width: 100%; height: 100%; object-fit: cover; }
+        .detail-right { width: 45%; padding: 120px 8%; background: var(--bg-color); }
+        
+        .close-detail {
+            position: fixed; top: 40px; right: 6%; z-index: 2100;
+            font-family: var(--font-en); font-size: 0.7rem; letter-spacing: 4px;
+            cursor: pointer; color: var(--secondary-color); transition: var(--transition-quick);
+        }
+        .close-detail:hover { color: var(--primary-color); transform: scale(1.1); }
+
+        .detail-info h2 { font-size: 3rem; font-weight: 200; letter-spacing: 10px; margin-bottom: 50px; line-height: 1.3; }
+        .detail-specs { margin-bottom: 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; border-top: 1px solid #eee; padding-top: 40px; }
+        .spec-item .label { font-size: 0.65rem; color: #aaa; text-transform: uppercase; letter-spacing: 3px; display: block; margin-bottom: 8px; }
+        .spec-item .val { font-size: 0.9rem; color: var(--primary-color); }
+        
+        .detail-long-desc { font-size: 1.05rem; line-height: 2.2; color: var(--secondary-color); letter-spacing: 1.5px; }
+        .detail-long-desc p { margin-bottom: 30px; }
+
+        /* Lightbox */
+        #lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(253, 250, 245, 0.98); z-index: 3000;
+            display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.5s ease;
+        }
+        #lightbox.active { opacity: 1; }
+        .lb-content { position: relative; max-width: 80%; max-height: 80%; }
+        .lb-img { max-width: 100%; max-height: 80vh; box-shadow: 0 50px 100px rgba(0,0,0,0.1); transition: transform 0.5s var(--transition-smooth); }
+        .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 2rem; color: var(--accent-color); cursor: pointer; padding: 20px; transition: var(--transition-quick); }
+        .lb-nav:hover { color: var(--primary-color); }
+        .lb-prev { left: -100px; }
+        .lb-next { right: -100px; }
+
+        /* 按钮交互 */
+        .btn-museum {
+            display: inline-block; padding: 15px 45px; border: 1px solid var(--primary-color);
+            background: none; color: var(--primary-color); font-size: 0.7rem;
+            letter-spacing: 4px; text-transform: uppercase; cursor: pointer;
+            transition: var(--transition-quick); position: relative; overflow: hidden;
+        }
+        .btn-museum:hover { background: rgba(26, 26, 26, 0.03); box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
+        .btn-museum:active { transform: scale(0.97); }
+
+        /* 逐字出现动画 */
+        .char { display: inline-block; opacity: 0; transform: translateY(10px); transition: var(--transition-quick); }
+        .char.fade { opacity: 1; transform: translateY(0); }
+
+        /* 页脚 */
+        footer { padding: 120px 6% 60px; text-align: center; border-top: 1px solid rgba(0,0,0,0.03); }
+        .footer-logo { font-size: 1.2rem; font-weight: 200; letter-spacing: 10px; margin-bottom: 30px; }
+        .footer-copy { font-size: 0.6rem; color: #bbb; letter-spacing: 3px; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .works-grid { grid-template-columns: 1fr; gap: 80px; }
+            .detail-container { flex-direction: column; }
+            .detail-left, .detail-right { width: 100%; }
+            .detail-left { height: 50vh; position: relative; }
+            .intro-content h1 { font-size: 3rem; letter-spacing: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">Kuang Ziyi</div>
+        <nav class="nav-links">
+            <a href="#home" class="active">Home</a>
+            <a href="#works">Works</a>
+            <a href="#about">About</a>
+        </nav>
+    </header>
+
+    <div class="parallax-bg" id="parallax-bg"></div>
+
+    <main id="home">
+        <section class="intro-section" id="home">
+            <div class="intro-content">
+                <span class="label">VISUAL COMMUNICATION & PACKAGING</span>
+                <h1 id="typewriter-h1">个人作品集</h1>
+                <p>以克制的设计语言，探索包装在商业逻辑与艺术美感之间的平衡。坚持“少即是多”的原则，为品牌构建深度的情感共鸣。</p>
+                <button class="btn-museum" style="margin-top: 60px;" onclick="document.getElementById('works-anchor').scrollIntoView({behavior:'smooth'})">Explore Exhibition</button>
+            </div>
+        </section>
+
+        <div id="works-anchor"></div>
+        <section class="works-section" id="works">
+            <div class="filter-nav">
+                <button class="filter-btn active">All Projects</button>
+                <button class="filter-btn">Skincare</button>
+                <button class="filter-btn">Beverage</button>
+                <button class="filter-btn">Healthcare</button>
+            </div>
+
+            <div class="works-grid" id="works-grid">
+                <!-- 作品将由 JS 动态生成以支持复杂动画 -->
+            </div>
+        </section>
+
+        <section class="intro-section" id="about" style="height: auto; padding: 150px 10%; background: #fff;">
+            <div class="detail-container" style="align-items: center; gap: 100px;">
+                <div style="width: 350px; overflow: hidden; border-radius: 2px;">
+                    <img src="581ad3e29bfdb984938400c633f4b235.jpg" alt="邝子伊" style="width: 100%; display: block; filter: grayscale(100%); transition: 1s;" onmouseover="this.style.filter='grayscale(0)'" onmouseout="this.style.filter='grayscale(100%)'">
+                </div>
+                <div class="about-text">
+                    <span class="label">ABOUT DESIGNER</span>
+                    <h2>邝子伊 / Kuang Ziyi</h2>
+                    <p>我是一名专注于包装设计的视觉传达设计师。在我的职业生涯中，我始终致力于通过结构创新与材质实验，挑战传统包装的边界。</p>
+                    <p>我主张“叙事性包装”，即通过视觉元素讲述品牌背后的故事，使消费者在接触产品的第一秒便能建立深层链接。我的设计风格干净、理性且富有温度。</p>
+                    <button class="btn-museum">Download CV</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 详情视图 -->
+    <div id="detail-view">
+        <div class="close-detail" onclick="closeDetail()">CLOSE / 返回</div>
+        <div class="detail-container">
+            <div class="detail-left"><img id="det-img" src="" alt=""></div>
+            <div class="detail-right">
+                <div class="detail-info">
+                    <h2 id="det-title"></h2>
+                    <div class="detail-specs">
+                        <div class="spec-item"><span class="label">Timeline</span><span class="val" id="det-time"></span></div>
+                        <div class="spec-item"><span class="label">Category</span><span class="val" id="det-cat"></span></div>
+                        <div class="spec-item"><span class="label">Client</span><span class="val">Concept Project</span></div>
+                        <div class="spec-item"><span class="label">Role</span><span class="val">Lead Designer</span></div>
+                    </div>
+                    <div class="detail-long-desc" id="det-desc"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox">
+        <div class="lb-prev lb-nav" onclick="changeLb(-1)">&#8249;</div>
+        <div class="lb-content">
+            <span class="close-detail" style="top: -40px; right: 0;" onclick="closeLb()">ESC</span>
+            <img src="" class="lb-img" id="lb-img">
+        </div>
+        <div class="lb-next lb-nav" onclick="changeLb(1)">&#8250;</div>
+    </div>
+
+    <footer>
+        <div class="footer-logo">Kuang Ziyi</div>
+        <p class="footer-copy">MUSEUM OF PACKAGING DESIGN &copy; 2026. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        const projectData = [
+            {
+                id: 'cream', title: '滴沥面霜包装设计', cat: 'Skincare / Baby Care', time: 'Jan 2026', img: '1.png',
+                short: '温和安全的设计理念，薄荷绿主色与圆润造型增强亲和力。',
+                long: '<p>本方案是针对高端婴儿护肤市场的一次深度探索。核心挑战在于如何在保证医药级安全感的同时，传递出母亲般的温柔。我们选用了低饱和度的薄荷绿（Mint Green），这种颜色在心理学上具有极佳的镇静效果。</p><p>瓶身结构摒弃了所有锐角，采用仿生学的圆润曲线，不仅在视觉上更具亲和力，手感也更加细腻丝滑。包装材质选用了环保PP材质，结合磨砂工艺，有效提升了防滑性能与产品质感。</p>'
+            },
+            {
+                id: 'coffee', title: 'info 咖啡包装设计', cat: 'Beverage / Minimalist', time: 'Dec 2025', img: '2.png',
+                short: '极简主义美学，黑白灰配橙色，方形杯体彰显高效便携。',
+                long: '<p>info咖啡旨在服务于高压力的都市职场人群。设计逻辑围绕“信息透明”与“极简效率”展开。包装正面仅保留最核心的咖啡风味参数，去除冗余装饰。</p><p>创新的方形杯体设计不仅是为了视觉上的差异化，更是出于对物流空间的极致利用。相比圆形杯体，方形结构在运输过程中可减少约15%的空间浪费。橙色的点缀作为视觉导向，引导用户快速识别开启位置，体现了功能性与美学的完美统一。</p>'
+            },
+            {
+                id: 'pill', title: '智能药瓶设计', cat: 'Medical / Industrial', time: 'Oct 2025', img: '3.jpg',
+                short: '家庭用药智能方案，蓝白配色与流畅线条，功能与美学的统一。',
+                long: '<p>这款智能药瓶的设计初衷是解决老年群体经常漏服、误服药物的社会痛点。我们将物联网芯片与传统包装结构深度结合。蓝白的经典配色传递出医药产品的专业性与严谨性。</p><p>瓶身线条经过多次人体工程学测试，确保握持舒适度。顶盖集成了柔和的LED提醒灯带与微型蜂鸣器，通过与手机APP联动，实现定时提醒与开盖记录。这不仅是一件包装，更是一个守护家庭健康的智能终端。</p>'
+            },
+            {
+                id: 'cat', title: 'Cat Ecopaws 猫罐头', cat: 'Pet Food / Sustainable', time: 'Aug 2025', img: '4.jpg',
+                short: '100%可降解纸材，独特的猫爪造型，环保与爱心的结合。',
+                long: '<p>Cat Ecopaws是宠物行业可持续包装的一次大胆尝试。我们完全摒弃了传统的马口铁材质，转而研发出一种高强度的可降解原木色纸复合材料，实现了包装100%可生物降解。</p><p>造型上采用了极具情感化沟通的“猫爪”形态，底部带有稳固的支撑结构。橙色的扁平化猫咪插画不仅增加了产品的货架吸引力，更向消费者传递出“爱宠即是爱地球”的环保理念。</p>'
+            },
+            {
+                id: 'wellness', title: '四洽四品养生包装', cat: 'Wellness / Tradition', time: 'May 2025', img: '5.png',
+                short: '中式美学底蕴，深绿配金竹叶纹样，典雅庄重的养生礼盒。',
+                long: '<p>四洽四品代表了中医养生中的“调和”哲学。设计灵感源于中国传统园林中的“竹”与“墨”。深邃的森林绿作为底色，象征着生命的活力与自然的平衡。</p><p>包装表面通过冷烫金工艺勾勒出细腻的竹叶纹样，随着光线角度的变化，竹叶若隐若现，营造出富有禅意的动态美感。内盒结构参考了传统多宝阁的布局，使拆解包装的过程成为一场极具仪式感的养生文化之旅。</p>'
+            },
+            {
+                id: 'vc', title: '维C泡腾片包装设计', cat: 'Healthcare / Youthful', time: 'Mar 2025', img: 'untitled.8.jpg',
+                short: '面向年轻群体的趣味化设计，高饱和撞色打造视觉记忆点。',
+                long: '<p>针对Z世代对传统保健品的审美疲劳，我们为维C泡腾片注入了全新的“社交属性”。设计采用了极其大胆的高饱和撞色：西瓜红与柠檬黄，这种色彩组合本身就代表了充足的维C活力。</p><p>插画风格上选用了极简的扁平化图形，将抽象的维生素分子具象化为美味的水果切片。这种趣味性的视觉表达，旨在降低保健品的消费门槛，使“补充营养”成为一种时尚、有趣的生活方式。包装管身采用轻量化铝合金，磨砂质感防滑耐用。</p>'
+            }
+        ];
+
+        // 动态生成作品
+        const grid = document.getElementById('works-grid');
+        projectData.forEach((p, index) => {
+            const card = document.createElement('div');
+            card.className = 'work-card';
+            card.innerHTML = `
+                <div class="img-wrap"><img src="${p.img}" alt="${p.title}"></div>
+                <div class="work-meta">
+                    <span class="cat">${p.cat}</span>
+                    <h3>${p.title}</h3>
+                    <p class="short-desc">${p.short}</p>
+                </div>
+            `;
+            card.onclick = () => showDetail(p);
+            grid.appendChild(card);
+        });
+
+        // 滚动视差
+        window.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth/2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight/2) * 0.01;
+            document.getElementById('parallax-bg').style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+
+        // 滚动监听：导航高亮与卡片入场
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            header.classList.toggle('scrolled', window.scrollY > 50);
+
+            // 卡片分批延迟入场
+            document.querySelectorAll('.work-card').forEach((el, i) => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    setTimeout(() => el.classList.add('reveal'), (i % 2) * 200);
+                }
+            });
+
+            // 导航跟随
+            let current = "";
+            document.querySelectorAll('section').forEach(section => {
+                if (window.scrollY >= section.offsetTop - 100) current = section.getAttribute('id');
+            });
+            document.querySelectorAll('.nav-links a').forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href').includes(current)) a.classList.add('active');
+            });
+        });
+
+        // 逐字显示功能
+        function wrapText(el) {
+            const text = el.innerText;
+            el.innerHTML = '';
+            text.split('').forEach((char, i) => {
+                const span = document.createElement('span');
+                span.className = 'char';
+                span.innerText = char;
+                span.style.transitionDelay = `${i * 0.03}s`;
+                el.appendChild(span);
+                setTimeout(() => span.classList.add('fade'), 10);
+            });
+        }
+
+        // 详情页功能
+        function showDetail(p) {
+            document.getElementById('det-img').src = p.img;
+            document.getElementById('det-title').innerText = p.title;
+            document.getElementById('det-time').innerText = p.time;
+            document.getElementById('det-cat').innerText = p.cat;
+            document.getElementById('det-desc').innerHTML = p.long;
+            
+            const view = document.getElementById('detail-view');
+            view.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            wrapText(document.getElementById('det-title'));
+        }
+
+        function closeDetail() {
+            document.getElementById('detail-view').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Lightbox
+        let lbIndex = 0;
+        function openLb(index) {
+            lbIndex = index;
+            updateLb();
+            document.getElementById('lightbox').style.display = 'flex';
+            setTimeout(() => document.getElementById('lightbox').classList.add('active'), 10);
+        }
+        function closeLb() {
+            document.getElementById('lightbox').classList.remove('active');
+            setTimeout(() => document.getElementById('lightbox').style.display = 'none', 500);
+        }
+        function changeLb(dir) {
+            lbIndex = (lbIndex + dir + projectData.length) % projectData.length;
+            updateLb();
+        }
+        function updateLb() {
+            const img = document.getElementById('lb-img');
+            img.style.transform = 'scale(0.95)';
+            img.style.opacity = '0';
+            setTimeout(() => {
+                img.src = projectData[lbIndex].img;
+                img.style.transform = 'scale(1)';
+                img.style.opacity = '1';
+            }, 200);
+        }
+
+        // 初始化
+        window.dispatchEvent(new Event('scroll'));
+        wrapText(document.getElementById('typewriter-h1'));
+    </script>
+</body>
+</html>
